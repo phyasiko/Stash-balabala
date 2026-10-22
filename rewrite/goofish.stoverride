@@ -1,0 +1,26 @@
+name: 闲鱼去开屏广告
+desc: 拦截闲鱼开屏广告加载、广告配置及启动上报
+author: Custom
+
+# 1. 解密闲鱼 MTOP 域名
+mitm:
+  hostnames:
+    - "acs.m.goofish.com"
+    - "acs.m.taobao.com"
+
+# 2. 精确匹配重写规则
+http:
+  url-rewrite:
+    # 1) 拦截开屏广告请求 (核心)
+    # 匹配: POST /gw/mtop.taobao.idlecommerce.splash.ads/2.0
+    - ^https?:\/\/acs\.m\.(goofish|taobao)\.com\/gw\/mtop\.taobao\.idlecommerce\.splash\.ads\/ - reject
+
+    # 2) 拦截启动广告上报
+    # 匹配: POST /gw/mtop.idle.idleadv.app.launch.report/1.0
+    - ^https?:\/\/acs\.m\.(goofish|taobao)\.com\/gw\/mtop\.idle\.idleadv\.app\.launch\.report\/ - reject
+
+    # 3) 拦截启动配置获取 (可选，阻止拉取开屏配置)
+    # 匹配: POST /gw/mtop.taobao.idle.bootstrap.config.get/1.0
+    - ^https?:\/\/acs\.m\.(goofish|taobao)\.com\/gw\/mtop\.taobao\.idle\.bootstrap\.config\.get\/ - reject
+category: anti-ad
+icon: https://icon.103516.xyz/App/Goofish.png
