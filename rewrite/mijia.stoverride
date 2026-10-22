@@ -1,0 +1,36 @@
+name: 米家去广告复写
+desc: 拦截米家开屏广告、运营 Banner、广点通第三方广告及埋点
+author: Custom
+
+# 1. 解密域名列表
+mitm:
+  hostnames:
+    - "home.mi.com"
+    - "mi.gdt.qq.com"
+    - "s5.zdmimg.com"
+    - "sentry-monitor-new.zdmimg.com"
+
+# 2. 精确拦截广告请求
+http:
+  url-rewrite:
+    # 拦截米家开屏 Banner 广告 (openingBanner)[span_14](start_span)[span_14](end_span)
+    - ^https?:\/\/home\.mi\.com\/cgi-op\/api\/v1\/recommendation\/openingBanner - reject
+
+    # 拦截米家底部 Tab 广告与运营推荐[span_15](start_span)[span_15](end_span)
+    - ^https?:\/\/home\.mi\.com\/cgi-op\/api\/v1\/recommendation\/ - reject
+    - ^https?:\/\/home\.mi\.com\/newoperation\/ - reject
+
+    # 拦截腾讯广点通广告 SDK (mi.gdt.qq.com)[span_16](start_span)[span_16](end_span)
+    - ^https?:\/\/mi\.gdt\.qq\.com\/ - reject
+
+    # 拦截第三方广告竞价与 Sentry 监控 (zdmimg)[span_17](start_span)[span_17](end_span)
+    - ^https?:\/\/s5\.zdmimg\.com\/api\/v1\/ssp\/ - reject
+    - ^https?:\/\/sentry-monitor-new\.zdmimg\.com\/ - reject
+
+# 3. 域名兜底拦截
+rules:
+  - DOMAIN,mi.gdt.qq.com,REJECT[span_18](start_span)[span_18](end_span)
+  - DOMAIN,s5.zdmimg.com,REJECT[span_19](start_span)[span_19](end_span)
+  - DOMAIN,sentry-monitor-new.zdmimg.com,REJECT
+category: anti-ad
+icon: https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/Xiaomi_logo_%282021-%29.svg/1280px-Xiaomi_logo_%282021-%29.svg.png?utm_source=zh.wikipedia.org&utm_campaign=index&utm_content=thumbnail
