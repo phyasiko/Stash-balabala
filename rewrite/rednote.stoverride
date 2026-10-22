@@ -1,0 +1,35 @@
+name: 小红书去广告
+desc: 屏蔽小红书开屏广告、流内广告图片素材及追踪数据
+author: Custom
+category: anti-ad
+
+# 1. 解密域名列表（用于精确拦截 HTTPS 广告请求）
+mitm:
+  hostnames:
+    - "ads-img-al.xhscdn.com"
+    - "ads-img-qc.xhscdn.com"
+    - "ads-img-zn.xhscdn.com"
+    - "splash-ads.xiaohongshu.com"
+    - "ad-tracker.xiaohongshu.com"
+
+# 2. URL Rewrite 重写拦截规则
+http:
+  url-rewrite:
+    # 拦截广告图片及营销素材 (hera, magic-pocket 等)[span_0](start_span)[span_0](end_span)
+    - ^https?:\/\/ads-img-(al|qc|zn)\.xhscdn\.com\/(hera|magic-pocket)\/ - reject
+
+    # 拦截小红书开屏广告请求
+    - ^https?:\/\/splash-ads\.xiaohongshu\.com\/ - reject
+
+    # 拦截广告点击与数据上报追踪
+    - ^https?:\/\/ad-tracker\.xiaohongshu\.com\/ - reject
+
+# 3. 补充域名级兜底拦截（防止漏网之鱼）
+rules:
+  - DOMAIN,ads-img-al.xhscdn.com,REJECT[span_1](start_span)[span_1](end_span)
+  - DOMAIN,ads-img-qc.xhscdn.com,REJECT
+  - DOMAIN,ads-img-zn.xhscdn.com,REJECT
+  - DOMAIN,splash-ads.xiaohongshu.com,REJECT
+  - DOMAIN,ad-tracker.xiaohongshu.com,REJECT
+  - DOMAIN-SUFFIX,ads.xiaohongshu.com,REJECT
+icon: https://icon.103516.xyz/App/RedNote.png
