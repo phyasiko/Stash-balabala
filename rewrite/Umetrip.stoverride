@@ -1,0 +1,24 @@
+name: 航旅纵横净化
+desc: 主要是开屏广告
+category: anti-ad
+
+
+http:
+  url-rewrite:
+    # 拦截航旅纵横运营活动图片与图标 (/fs/activity/...)
+    - ^https?:\/\/[^\/]+\.umetrip\.(com|com\.cn)\/fs\/activity\/ - reject
+
+
+
+rules:
+  # 拦截航旅纵横运营活动广告 (首页 Banner/弹窗等)[span_15](start_span)[span_15](end_span)[span_16](start_span)[span_16](end_span)
+  - DOMAIN,opactivity.umetrip.com,REJECT
+
+  # 拦截航旅纵横神策数据上报与追踪[span_17](start_span)[span_17](end_span)
+  - DOMAIN,sensors.umetrip.com.cn,REJECT
+
+  # 拦截第三方第三方公共广告上报/日志（如截图中的美团/阿里推送等）[span_18](start_span)[span_18](end_span)
+  - DOMAIN,p1.meituan.net,REJECT
+icon: https://icon.103516.xyz/App/Umetrip.png
+
+
